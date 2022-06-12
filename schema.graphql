@@ -1,0 +1,139 @@
+type Marketplace @entity {
+  # Marketplace contract address.
+  id: ID!
+
+  # Total number of listings.
+  listingCount: Int!
+
+  totalVolumeUSD: BigDecimal!
+  totalTokensSold: BigInt!
+  txCount: BigInt!
+}
+
+type Listing @entity {
+  # Listing ID in Marketplace contract.
+  id: ID!
+  exists: Boolean!
+
+  seller: User!
+  assetAddress: String!
+  tokenClass: BigInt!
+  numberOfTokens: BigInt!
+  tokenPrice: BigInt!
+}
+
+type User @entity {
+  # User's wallet address.
+  id: ID!
+  numberOfTokensSold: BigInt!
+  tradingVolumeUSD: BigDecimal!
+
+  listings: [Listing!]! @derivedFrom(field: "seller")
+  transactions: [Transaction!]! @derivedFrom(field: "user")
+}
+
+type Transaction @entity {
+  # Transaction hash.
+  id: ID!
+  blockNumber: BigInt!
+  timestamp: BigInt!
+  user: User!
+  assetAddress: String!
+
+  createListing: CreateListing
+  removeListing: RemoveListing
+  updatePrice: UpdatePrice
+  updateQuantity: UpdateQuantity
+  purchase: Purchase
+}
+
+type CreateListing @entity {
+  # Transaction ID + "-createListing".
+  id: ID!
+  transaction: Transaction!
+  # Need this to pull recent txns for marketplace.
+  timestamp: BigInt! 
+
+  seller: String!
+  assetAddress: String!
+  tokenClass: BigInt!
+  numberOfTokens: BigInt!
+  tokenPrice: BigInt!
+
+  # Listing ID.
+  index: BigInt!
+}
+
+type RemoveListing @entity {
+  # Transaction ID + "-removeListing".
+  id: ID!
+  transaction: Transaction!
+  # Need this to pull recent txns for marketplace.
+  timestamp: BigInt!
+
+  seller: String!
+  assetAddress: String!
+
+  # Listing ID.
+  index: BigInt!
+}
+
+type UpdatePrice @entity {
+  # Transaction ID + "-updatePrice".
+  id: ID!
+  transaction: Transaction!
+  # Need this to pull recent txns for marketplace.
+  timestamp: BigInt!
+
+  seller: String!
+  assetAddress: String!
+  newTokenPrice: BigInt!
+
+  # Listing ID.
+  index: BigInt!
+}
+
+type UpdateQuantity @entity {
+  # Transaction ID + "-updateQuantity".
+  id: ID!
+  transaction: Transaction!
+  # Need this to pull recent txns for marketplace.
+  timestamp: BigInt!
+
+  seller: String!
+  assetAddress: String!
+  newQuantity: BigInt!
+
+  # Listing ID.
+  index: BigInt!
+}
+
+type Purchase @entity {
+  # Transaction ID + "-purchase".
+  id: ID!
+  transaction: Transaction!
+  # Need this to pull recent txns for marketplace.
+  timestamp: BigInt!
+
+  buyer: String!
+  assetAddress: String!
+  numberOfTokens: BigInt!
+  tokenPrice: BigInt!
+  tokenClass: BigInt!
+
+  # Listing ID.
+  index: BigInt!
+}
+
+# Data accumulated and condensed into day stats for all of marketplace.
+type MarketplaceDayData @entity {
+  # Timestamp rounded to current day by dividing by 86400.
+  id: ID! 
+  date: Int!
+
+  dailyVolumeUSD: BigDecimal!
+  totalVolumeUSD: BigDecimal!
+  dailyNumberOfTokensSold: BigInt!
+
+  txCount: BigInt!
+}
