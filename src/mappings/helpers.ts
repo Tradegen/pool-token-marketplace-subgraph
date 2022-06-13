@@ -63,7 +63,7 @@ import {
     let contract = MarketplaceContract.bind(Address.fromString(MARKETPLACE_ADDRESS));
   
     let result = contract.try_getMarketplaceListing(listingIndex);
-    let resultValue2 = result.value.toMap().get("value2").toBigInt();
+    let resultValue3 = result.value.toMap().get("value3").toBigInt();
   
-    return resultValue2 ? resultValue2 : ZERO_BI;
+    return resultValue3 ? resultValue3 : ZERO_BI;
   }

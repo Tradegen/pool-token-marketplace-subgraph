@@ -56,7 +56,7 @@ export function handleCreateListing(event: CreatedListing): void {
     let listing = new Listing(event.params.marketplaceListing.toString());
     listing.exists = true;
     listing.seller = user.id;
-    listing.assetAddress = event.params.asset.toHexString();
+    listing.assetAddress = event.params.poolAddress.toHexString();
     listing.tokenClass = event.params.tokenClass;
     listing.numberOfTokens = event.params.numberOfTokens;
     listing.tokenPrice = event.params.price;
@@ -66,7 +66,7 @@ export function handleCreateListing(event: CreatedListing): void {
     transaction.blockNumber = event.block.number;
     transaction.timestamp = event.block.timestamp;
     transaction.user = user.id;
-    transaction.assetAddress = event.params.asset.toHexString();
+    transaction.assetAddress = event.params.poolAddress.toHexString();
     transaction.save();
     
     // update CreateListing event
@@ -74,7 +74,7 @@ export function handleCreateListing(event: CreatedListing): void {
     create.transaction = transaction.id;
     create.timestamp = transaction.timestamp;
     create.seller = event.params.seller.toHexString();
-    create.assetAddress = event.params.asset.toHexString();
+    create.assetAddress = event.params.poolAddress.toHexString();
     create.tokenClass = event.params.tokenClass;
     create.numberOfTokens = event.params.numberOfTokens;
     create.tokenPrice = event.params.price;
@@ -119,7 +119,7 @@ export function handleRemoveListing(event: RemovedListing): void {
      {
       listing.exists = false;
       listing.seller = user.id;
-      listing.assetAddress = event.params.asset.toHexString();
+      listing.assetAddress = event.params.poolAddress.toHexString();
       listing.numberOfTokens = ZERO_BI;
       listing.tokenPrice = ZERO_BI;
       listing.save();
@@ -129,7 +129,7 @@ export function handleRemoveListing(event: RemovedListing): void {
      transaction.blockNumber = event.block.number;
      transaction.timestamp = event.block.timestamp;
      transaction.user = user.id;
-     transaction.assetAddress = event.params.asset.toHexString();
+     transaction.assetAddress = event.params.poolAddress.toHexString();
      transaction.save();
      
      // update RemoveListing event
@@ -137,7 +137,7 @@ export function handleRemoveListing(event: RemovedListing): void {
      remove.transaction = transaction.id;
      remove.timestamp = transaction.timestamp;
      remove.seller = event.params.seller.toHexString();
-     remove.assetAddress = event.params.asset.toHexString();
+     remove.assetAddress = event.params.poolAddress.toHexString();
      remove.index = event.params.marketplaceListing;
      remove.save();
      
@@ -184,7 +184,7 @@ export function handleUpdatePrice(event: UpdatedPrice): void {
     transaction.blockNumber = event.block.number;
     transaction.timestamp = event.block.timestamp;
     transaction.user = user.id;
-    transaction.assetAddress = event.params.asset.toHexString();
+    transaction.assetAddress = event.params.poolAddress.toHexString();
     transaction.save();
     
     // update UpdatePrice event
@@ -192,7 +192,7 @@ export function handleUpdatePrice(event: UpdatedPrice): void {
     updatePrice.transaction = transaction.id;
     updatePrice.timestamp = transaction.timestamp;
     updatePrice.seller = event.params.seller.toHexString();
-    updatePrice.assetAddress = event.params.asset.toHexString();
+    updatePrice.assetAddress = event.params.poolAddress.toHexString();
     updatePrice.index = event.params.marketplaceListing;
     updatePrice.newTokenPrice = event.params.newPrice;
     updatePrice.save();
@@ -240,7 +240,7 @@ export function handleUpdatedQuantity(event: UpdatedQuantity): void {
   transaction.blockNumber = event.block.number;
   transaction.timestamp = event.block.timestamp;
   transaction.user = user.id;
-  transaction.assetAddress = event.params.asset.toHexString();
+  transaction.assetAddress = event.params.poolAddress.toHexString();
   transaction.save();
   
   // update UpdateQuantity event
@@ -248,7 +248,7 @@ export function handleUpdatedQuantity(event: UpdatedQuantity): void {
   updateQuantity.transaction = transaction.id;
   updateQuantity.timestamp = transaction.timestamp;
   updateQuantity.seller = event.params.seller.toHexString();
-  updateQuantity.assetAddress = event.params.asset.toHexString();
+  updateQuantity.assetAddress = event.params.poolAddress.toHexString();
   updateQuantity.index = event.params.marketplaceListing;
   updateQuantity.newQuantity = event.params.newQuantity;
   updateQuantity.save();
@@ -303,7 +303,7 @@ export function handlePurchase(event: Purchased): void {
   transaction.blockNumber = event.block.number;
   transaction.timestamp = event.block.timestamp;
   transaction.user = user.id;
-  transaction.assetAddress = event.params.asset.toHexString();
+  transaction.assetAddress = event.params.poolAddress.toHexString();
   transaction.save();
   
   // update Purchase event
@@ -311,7 +311,7 @@ export function handlePurchase(event: Purchased): void {
   purchase.transaction = transaction.id;
   purchase.timestamp = transaction.timestamp;
   purchase.buyer = event.params.buyer.toHexString();
-  purchase.assetAddress = event.params.asset.toHexString();
+  purchase.assetAddress = event.params.poolAddress.toHexString();
   purchase.index = event.params.marketplaceListing;
   purchase.numberOfTokens = event.params.numberOfTokens;
   purchase.tokenPrice = event.params.tokenPrice;
