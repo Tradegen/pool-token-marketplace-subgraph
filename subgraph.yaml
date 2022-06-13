@@ -22,7 +22,7 @@ dataSources:
         - name: Marketplace
           file: ./abis/Marketplace.json
       eventHandlers:
-        - event: CreatedListing(address,address,uint256,uint256,uint256,uint256,uint256)
+        - event: CreatedListing(address,address,uint256,uint256,uint256,uint256)
           handler: handleCreateListing
         - event: RemovedListing(address,address,uint256)
           handler: handleRemoveListing
