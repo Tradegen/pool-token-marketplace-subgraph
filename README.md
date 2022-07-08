@@ -1,4 +1,4 @@
-# Virtual Trading Environment Subgraph
+# Pool Token Marketplace Subgraph
 
 Tradegen is a decentralized trading platform that focuses on asset management, algo trading, and virtual trading.
 
