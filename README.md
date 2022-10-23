@@ -1,6 +1,6 @@
 # Pool Token Marketplace Subgraph
 
-This subgraph dynamically tracks the sale of capped pool tokens in the capped pool token marketplace, as part of our asset management protocol v2.
+This subgraph dynamically tracks the sale of capped pool tokens in the capped pool token marketplace, as part of our [asset management protocol v2](https://github.com/Tradegen/protocol-v2).
 
 - aggregated data across marketplace listings,
 - data on individual listings,
