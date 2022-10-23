@@ -5,41 +5,75 @@ type Marketplace @entity {
   # Total number of listings.
   listingCount: Int!
 
+  # Total volume (in USD) across all listings.
   totalVolumeUSD: BigDecimal!
+
+  # Total number of tokens sold across all listings.
   totalTokensSold: BigInt!
+
+  # Total number of transactions.
   txCount: BigInt!
 }
 
 type Listing @entity {
   # Listing ID in Marketplace contract.
   id: ID!
+
+  # Whether the listing still exists.
+  # The listing "exists" if the number of tokens for sale is greater than 0.
+  # Listings in the marketplace contract are never deleted.
   exists: Boolean!
 
+  # Reference to the listing's seller.
   seller: User!
+
+  # Address of the CappedPoolToken contract.
   assetAddress: String!
+
+  # Class (1-4) of the pool token, specifying the token's rarity.
   tokenClass: BigInt!
+
+  # Number of pool tokens for sale.
   numberOfTokens: BigInt!
+
+  # Sale price per token (in USD).
   tokenPrice: BigInt!
 }
 
 type User @entity {
   # User's wallet address.
   id: ID!
+
+  # Total number of tokens this user has sold.
   numberOfTokensSold: BigInt!
+
+  # Total volume (in USD) of this user.
+  # Includes both buying and selling volume.
   tradingVolumeUSD: BigDecimal!
 
+  # Listing entities associated with this user.
   listings: [Listing!]! @derivedFrom(field: "seller")
+
+  # Transaction entities associated with this user.
   transactions: [Transaction!]! @derivedFrom(field: "user")
 }
 
 type Transaction @entity {
   # Transaction hash.
   id: ID!
+
+  # Blockchain data pertaining to this transaction.
   blockNumber: BigInt!
   timestamp: BigInt!
+
+  # User entity associated with this transaction.
   user: User!
+
+  # Address of the CappedPoolToken contract.
   assetAddress: String!
 
+  # Specifies the transaction type.
+  # Each transaction will have exactly one subtype.
   createListing: CreateListing
   removeListing: RemoveListing
   updatePrice: UpdatePrice
@@ -50,78 +84,124 @@ type Transaction @entity {
 type CreateListing @entity {
   # Transaction ID + "-createListing".
   id: ID!
+
+  # Reference to the parent Transaction entity.
   transaction: Transaction!
+
   # Need this to pull recent txns for marketplace.
   timestamp: BigInt! 
 
+  # Address of the seller.
   seller: String!
+
+  # Address of the CappedPoolToken contract.
   assetAddress: String!
+
+  # Class (1-4) of the pool token, specifying the token's rarity.
   tokenClass: BigInt!
+
+  # Number of pool tokens listed for sale.
   numberOfTokens: BigInt!
+
+  # Price per token (in USD).
   tokenPrice: BigInt!
 
-  # Listing ID.
+  # Listing ID in the Marketplace contract.
   index: BigInt!
 }
 
 type RemoveListing @entity {
   # Transaction ID + "-removeListing".
   id: ID!
-  transaction: Transaction!
-  # Need this to pull recent txns for marketplace.
-  timestamp: BigInt!
 
+  # Reference to the parent Transaction entity.
+  transaction: Transaction!
+
+  # Need this to pull recent txns for marketplace.
+  timestamp: BigInt! 
+
+  # Address of the seller.
   seller: String!
+
+  # Address of the CappedPoolToken contract.
   assetAddress: String!
 
-  # Listing ID.
+  # Listing ID in the Marketplace contract.
   index: BigInt!
 }
 
 type UpdatePrice @entity {
   # Transaction ID + "-updatePrice".
   id: ID!
+  
+  # Reference to the parent Transaction entity.
   transaction: Transaction!
-  # Need this to pull recent txns for marketplace.
-  timestamp: BigInt!
 
+  # Need this to pull recent txns for marketplace.
+  timestamp: BigInt! 
+
+  # Address of the seller.
   seller: String!
+
+  # Address of the CappedPoolToken contract.
   assetAddress: String!
+
+  # New price per token (in USD).
   newTokenPrice: BigInt!
 
-  # Listing ID.
+  # Listing ID in the Marketplace contract.
   index: BigInt!
 }
 
 type UpdateQuantity @entity {
   # Transaction ID + "-updateQuantity".
   id: ID!
+  
+  # Reference to the parent Transaction entity.
   transaction: Transaction!
-  # Need this to pull recent txns for marketplace.
-  timestamp: BigInt!
 
+  # Need this to pull recent txns for marketplace.
+  timestamp: BigInt! 
+
+  # Address of the seller.
   seller: String!
+
+  # Address of the CappedPoolToken contract.
   assetAddress: String!
+
+  # New number of tokens for sale.
   newQuantity: BigInt!
 
-  # Listing ID.
+  # Listing ID in the Marketplace contract.
   index: BigInt!
 }
 
 type Purchase @entity {
   # Transaction ID + "-purchase".
   id: ID!
+  
+  # Reference to the parent Transaction entity.
   transaction: Transaction!
-  # Need this to pull recent txns for marketplace.
-  timestamp: BigInt!
 
+  # Need this to pull recent txns for marketplace.
+  timestamp: BigInt! 
+
+  # Address of the buyer.
   buyer: String!
+
+  # Address of the CappedPoolToken contract.
   assetAddress: String!
+
+  # Number of pool tokens purchased.
   numberOfTokens: BigInt!
+
+  # Price per token at which the tokens were purchased.
   tokenPrice: BigInt!
+
+  # Class (1-4) of the pool token, specifying the token's rarity.
   tokenClass: BigInt!
 
-  # Listing ID.
+  # Listing ID in the Marketplace contract.
   index: BigInt!
 }
 
@@ -131,9 +211,16 @@ type MarketplaceDayData @entity {
   id: ID! 
   date: Int!
 
+  # Total USD volume for the day across all listings.
   dailyVolumeUSD: BigDecimal!
+
+  # Total all-time USD volume across all listings.
   totalVolumeUSD: BigDecimal!
+
+  # Total number of tokens sold for the day across all listings.
   dailyNumberOfTokensSold: BigInt!
 
+  # Total number of transactions across all listings.
+  # Includes all transaction subtypes (CreateListing, RemoveListing, UpdatePrice, UpdateQuantity, Purchase).
   txCount: BigInt!
 }
